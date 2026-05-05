@@ -56,21 +56,32 @@ function FloatingParticles() {
   const [particles, setParticles] = useState<any[]>([])
 
   useEffect(() => {
-    const generated = [...Array(20)].map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      background:
-        i % 3 === 0
-          ? '#6366f1'
-          : i % 3 === 1
-          ? '#8b5cf6'
-          : '#ec4899',
-      duration: 4,
-      delay: i * 0.1,
-    }))
+    const generated = [
+      { id: 0, left: '12%', top: '18%', background: '#6366f1', duration: 4, delay: 0 },
+      { id: 1, left: '28%', top: '35%', background: '#8b5cf6', duration: 4, delay: 0.1 },
+      { id: 2, left: '44%', top: '62%', background: '#ec4899', duration: 4, delay: 0.2 },
+      { id: 3, left: '58%', top: '22%', background: '#6366f1', duration: 4, delay: 0.3 },
+      { id: 4, left: '72%', top: '48%', background: '#8b5cf6', duration: 4, delay: 0.4 },
+      { id: 5, left: '84%', top: '70%', background: '#ec4899', duration: 4, delay: 0.5 },
+      { id: 6, left: '35%', top: '80%', background: '#6366f1', duration: 4, delay: 0.6 },
+      { id: 7, left: '90%', top: '15%', background: '#8b5cf6', duration: 4, delay: 0.7 },
+      { id: 8, left: '15%', top: '45%', background: '#ec4899', duration: 4, delay: 0.8 },
+      { id: 9, left: '65%', top: '25%', background: '#6366f1', duration: 4, delay: 0.9 },
+      { id: 10, left: '25%', top: '55%', background: '#8b5cf6', duration: 4, delay: 1.0 },
+      { id: 11, left: '75%', top: '35%', background: '#ec4899', duration: 4, delay: 1.1 },
+      { id: 12, left: '45%', top: '75%', background: '#6366f1', duration: 4, delay: 1.2 },
+      { id: 13, left: '85%', top: '40%', background: '#8b5cf6', duration: 4, delay: 1.3 },
+      { id: 14, left: '20%', top: '60%', background: '#ec4899', duration: 4, delay: 1.4 },
+      { id: 15, left: '55%', top: '85%', background: '#6366f1', duration: 4, delay: 1.5 },
+      { id: 16, left: '70%', top: '20%', background: '#8b5cf6', duration: 4, delay: 1.6 },
+      { id: 17, left: '30%', top: '50%', background: '#ec4899', duration: 4, delay: 1.7 },
+      { id: 18, left: '60%', top: '30%', background: '#6366f1', duration: 4, delay: 1.8 },
+      { id: 19, left: '80%', top: '65%', background: '#8b5cf6', duration: 4, delay: 1.9 },
+    ]
     setParticles(generated)
   }, [])
+
+  if (particles.length === 0) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -190,7 +201,7 @@ export default function ProjectsPage() {
     }
     const username = localStorage.getItem('githubUsername')
     if (!username) { setLoading(false); return }
-    fetch(`http://localhost:5000/api/github/${username}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/github/${username}`)
       .then(r => r.json())
       .then(data => {
         const repos = Array.isArray(data) ? data.map(r => ({ ...r, visible: true })) : []
@@ -213,7 +224,7 @@ export default function ProjectsPage() {
   const generateDescription = async (project: any, idx: number) => {
     setGenerating(project.name)
     try {
-      const res = await fetch('http://localhost:5000/api/ai/generate', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ai/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: project.name, description: project.description, language: project.language }),

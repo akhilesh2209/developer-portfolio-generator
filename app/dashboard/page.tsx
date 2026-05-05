@@ -20,17 +20,22 @@ function FloatingParticles() {
   const [particles, setParticles] = useState<any[]>([])
 
   useEffect(() => {
-    const generated = [...Array(10)].map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      color: i % 3 === 0 ? '#6366f1' : i % 3 === 1 ? '#8b5cf6' : '#06b6d4',
-      duration: 6 + Math.random() * 4,
-      delay: Math.random() * 5,
-      size: Math.random() * 1.5 + 0.5,
-    }))
+    const generated = [
+      { id: 0, left: '12%', top: '18%', color: '#6366f1', duration: 7, delay: 0, size: 1 },
+      { id: 1, left: '28%', top: '35%', color: '#8b5cf6', duration: 7, delay: 0.2, size: 1 },
+      { id: 2, left: '44%', top: '62%', color: '#06b6d4', duration: 7, delay: 0.4, size: 1 },
+      { id: 3, left: '58%', top: '22%', color: '#6366f1', duration: 7, delay: 0.6, size: 1 },
+      { id: 4, left: '72%', top: '48%', color: '#8b5cf6', duration: 7, delay: 0.8, size: 1 },
+      { id: 5, left: '84%', top: '70%', color: '#06b6d4', duration: 7, delay: 1.0, size: 1 },
+      { id: 6, left: '35%', top: '80%', color: '#6366f1', duration: 7, delay: 1.2, size: 1 },
+      { id: 7, left: '90%', top: '15%', color: '#8b5cf6', duration: 7, delay: 1.4, size: 1 },
+      { id: 8, left: '15%', top: '45%', color: '#06b6d4', duration: 7, delay: 1.6, size: 1 },
+      { id: 9, left: '65%', top: '25%', color: '#6366f1', duration: 7, delay: 1.8, size: 1 },
+    ]
     setParticles(generated)
   }, [])
+
+  if (particles.length === 0) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -98,7 +103,7 @@ export default function DashboardPage() {
         setShowGithubModal(true);
       }
 
-      fetch(`http://localhost:5000/api/analytics`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analytics`)
         .then(res => res.ok ? res.json() : { views: 0, clicks: 0, downloads: 0 })
         .then(data => setAnalytics(data))
         .catch(() => setAnalytics({ views: 0, clicks: 0, downloads: 0 }));
@@ -117,7 +122,7 @@ export default function DashboardPage() {
     setGithubLoading(true);
     setGithubError("");
     try {
-      const res = await fetch(`http://localhost:5000/api/github/${username}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/github/${username}`);
       if (!res.ok) throw new Error("User not found");
       const data = await res.json();
       if (!Array.isArray(data) || data.length === 0) {

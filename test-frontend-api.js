@@ -1,12 +1,12 @@
 // Test frontend API calls to verify they work correctly
-
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
 async function testFrontendAPI() {
   console.log('🧪 Testing Frontend API Integration...\n');
   
   try {
     // Test analytics endpoint (same as dashboard)
     console.log('1. Testing Analytics API (as called by frontend)...');
-    const analyticsRes = await fetch('http://localhost:5000/api/analytics');
+    const analyticsRes = await fetch(`${API}/api/analytics`);
     
     if (!analyticsRes.ok) {
       throw new Error(`Analytics API responded with status: ${analyticsRes.status}`);
@@ -22,7 +22,7 @@ async function testFrontendAPI() {
     
     // Test analytics view tracking
     console.log('\n2. Testing Analytics View Tracking...');
-    const viewRes = await fetch('http://localhost:5000/api/analytics/view', { 
+    const viewRes = await fetch(`${API}/api/analytics/view`, {
       method: 'POST' 
     });
     

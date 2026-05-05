@@ -539,7 +539,7 @@ export default function PortfolioPage() {
       setRepos(JSON.parse(savedRepos))
       setLoading(false)
     } else {
-      fetch(`http://localhost:5000/api/github/${username}`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/github/${username}`)
         .then(r => {
           if (!r.ok) throw new Error('User not found')
           return r.json()

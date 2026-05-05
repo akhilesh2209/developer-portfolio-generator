@@ -18,17 +18,22 @@ function FloatingParticles() {
   const [particles, setParticles] = useState<any[]>([])
 
   useEffect(() => {
-    const generated = [...Array(10)].map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      color: i % 3 === 0 ? '#6366f1' : i % 3 === 1 ? '#06b6d4' : '#8b5cf6',
-      duration: 6,
-      delay: i * 0.2,
-      size: Math.random() * 2 + 1,
-    }))
+    const generated = [
+      { id: 0, left: '12%', top: '18%', color: '#6366f1', duration: 6, delay: 0, size: 1.5 },
+      { id: 1, left: '28%', top: '35%', color: '#06b6d4', duration: 6, delay: 0.2, size: 2.5 },
+      { id: 2, left: '44%', top: '62%', color: '#8b5cf6', duration: 6, delay: 0.4, size: 1.8 },
+      { id: 3, left: '58%', top: '22%', color: '#6366f1', duration: 6, delay: 0.6, size: 2.2 },
+      { id: 4, left: '72%', top: '48%', color: '#06b6d4', duration: 6, delay: 0.8, size: 1.6 },
+      { id: 5, left: '84%', top: '70%', color: '#8b5cf6', duration: 6, delay: 1.0, size: 2.8 },
+      { id: 6, left: '35%', top: '80%', color: '#6366f1', duration: 6, delay: 1.2, size: 1.4 },
+      { id: 7, left: '90%', top: '15%', color: '#06b6d4', duration: 6, delay: 1.4, size: 2.6 },
+      { id: 8, left: '15%', top: '45%', color: '#8b5cf6', duration: 6, delay: 1.6, size: 1.9 },
+      { id: 9, left: '65%', top: '25%', color: '#6366f1', duration: 6, delay: 1.8, size: 2.3 },
+    ]
     setParticles(generated)
   }, [])
+
+  if (particles.length === 0) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -76,7 +81,7 @@ export default function DeployPage() {
     setTemplate(localStorage.getItem('selectedTemplate') || 'modern')
 
     const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
-    fetch(`http://localhost:5000/api/projects/user/${storedUser.id || storedUser._id}`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/${storedUser.id || storedUser._id}`)
       .then(r => r.ok ? r.json() : [])
       .then(() => {
         const localHistory = JSON.parse(localStorage.getItem('deployHistory') || '[]')
@@ -111,7 +116,7 @@ export default function DeployPage() {
     localStorage.setItem('deployHistory', JSON.stringify(history.slice(0, 10)))
     setDeployHistory(history.slice(0, 10))
 
-    fetch('http://localhost:5000/api/analytics/download', { method: 'POST' }).catch(() => {})
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analytics/download`, { method: 'POST' }).catch(() => {})
   }
 
   const handleVercelDeploy = () => {

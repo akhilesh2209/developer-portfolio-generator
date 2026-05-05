@@ -112,13 +112,32 @@ function FloatingParticles() {
   >([])
 
 useEffect(() => {
-    const newParticles = Array.from({ length: 20 }).map(() => ({
-      left: Math.random() * 100 + '%',
-      top: Math.random() * 100 + '%',
-    }))
+    const newParticles = [
+      { left: '12%', top: '18%' },
+      { left: '28%', top: '35%' },
+      { left: '44%', top: '62%' },
+      { left: '58%', top: '22%' },
+      { left: '72%', top: '48%' },
+      { left: '84%', top: '70%' },
+      { left: '35%', top: '80%' },
+      { left: '90%', top: '15%' },
+      { left: '15%', top: '45%' },
+      { left: '65%', top: '25%' },
+      { left: '25%', top: '55%' },
+      { left: '75%', top: '35%' },
+      { left: '45%', top: '75%' },
+      { left: '85%', top: '40%' },
+      { left: '20%', top: '60%' },
+      { left: '55%', top: '85%' },
+      { left: '70%', top: '20%' },
+      { left: '30%', top: '50%' },
+      { left: '60%', top: '30%' },
+      { left: '80%', top: '65%' },
+    ]
     setParticles(newParticles)
   }, [])
 
+  if (particles.length === 0) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -10,7 +10,7 @@ export function Footer() {
       title: 'Product',
       links: [
         { label: 'Portfolio Builder', href: '/dashboard' },
-        { label: 'Templates', href: '/templates' },
+        { label: 'Templates', href: '/dashboard/templates' },
         { label: 'Pricing', href: '/pricing' },
         { label: 'Analytics', href: '/dashboard/analytics' },
         { label: 'Changelog', href: '/changelog' },
@@ -49,7 +49,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative border-t border-white/5 bg-[#030712]">
+    <footer className="relative border-t border-border bg-background">
       {/* Top gradient line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
       
@@ -68,13 +68,13 @@ export function Footer() {
                 <Sparkles className="h-5 w-5 text-white" />
               </div>
               <div>
-                <span className="font-black text-xl text-white tracking-tight">
-                  Folio<span className="text-indigo-400">Forge</span>
+                <span className="font-black text-xl text-foreground tracking-tight">
+                  Folio<span className="text-indigo-500 dark:text-indigo-400">Forge</span>
                 </span>
               </div>
             </Link>
 
-            <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Build stunning developer portfolios automatically from your GitHub profile. 
               No design skills required.
             </p>
@@ -93,7 +93,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="h-9 w-9 rounded-lg border border-white/5 bg-white/[0.02] flex items-center justify-center text-gray-400 hover:text-white hover:border-white/10 hover:bg-white/[0.05] transition-all"
+                  className="h-9 w-9 rounded-lg border border-border bg-muted/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 hover:bg-muted/50 transition-all"
                 >
                   <social.icon className="h-4 w-4" />
                 </a>
@@ -104,7 +104,7 @@ export function Footer() {
           {/* Link Columns */}
           {Object.values(footerLinks).map((section) => (
             <div key={section.title}>
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-5">
+              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-5">
                 {section.title}
               </h3>
               <ul className="space-y-3">
@@ -112,7 +112,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-1 group"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
                     >
                       {link.label}
                       {link.label === 'Changelog' && (
@@ -130,15 +130,15 @@ export function Footer() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="border-t border-white/5 pt-10 pb-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 rounded-2xl bg-white/[0.02] border border-white/5">
+        <div className="border-t border-border pt-10 pb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 p-6 rounded-2xl bg-muted/30 border border-border">
             <div className="flex items-start gap-4">
-              <div className="h-10 w-10 rounded-xl bg-indigo-500/10 flex items-center justify-center flex-shrink-0 border border-indigo-500/20">
-                <Zap className="h-5 w-5 text-indigo-400" />
+              <div className="h-10 w-10 rounded-xl bg-indigo-100 dark:bg-indigo-500/10 flex items-center justify-center flex-shrink-0 border border-indigo-300 dark:border-indigo-500/20">
+                <Zap className="h-5 w-5 text-indigo-500 dark:text-indigo-400" />
               </div>
               <div>
-                <h4 className="font-semibold text-white text-sm">Stay up to date</h4>
-                <p className="text-xs text-gray-500 mt-1">
+                <h4 className="font-semibold text-foreground text-sm">Stay up to date</h4>
+                <p className="text-xs text-muted-foreground mt-1">
                   Get weekly updates on new features, templates, and portfolio tips.
                 </p>
               </div>
@@ -147,7 +147,7 @@ export function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="h-11 px-4 rounded-xl bg-white/5 border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.08] transition-all flex-1 sm:w-64"
+                className="h-11 px-4 rounded-xl bg-muted/50 border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-indigo-500/50 focus:bg-muted transition-all flex-1 sm:w-64"
               />
               <button className="h-11 px-6 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-sm font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all whitespace-nowrap">
                 Subscribe
@@ -157,19 +157,19 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+        <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>© {new Date().getFullYear()} FolioForge</span>
-            <span className="text-gray-700">·</span>
+            <span className="text-muted-foreground/50">·</span>
             <span className="flex items-center gap-1">
-              Built with <Heart className="h-3.5 w-3.5 text-red-400 fill-red-400" /> for developers
+              Built with <Heart className="h-3.5 w-3.5 text-red-500 fill-red-500" /> for developers
             </span>
           </div>
 
           <div className="flex items-center gap-6">
             <Link
               href="/status"
-              className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-400 transition-colors"
+              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               <span className="relative flex h-2 w-2">
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -177,16 +177,10 @@ export function Footer() {
               All systems operational
             </Link>
             
-            <div className="flex items-center gap-4 text-xs text-gray-600">
-              <Link href="/privacy" className="hover:text-gray-400 transition-colors">
-                Privacy
-              </Link>
-              <Link href="/terms" className="hover:text-gray-400 transition-colors">
-                Terms
-              </Link>
-              <Link href="/sitemap" className="hover:text-gray-400 transition-colors">
-                Sitemap
-              </Link>
+            <div className="flex items-center gap-4 text-xs text-muted-foreground/70">
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+              <Link href="/sitemap" className="hover:text-foreground transition-colors">Sitemap</Link>
             </div>
           </div>
         </div>

@@ -8,11 +8,36 @@ import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
-  User, Github, Linkedin, Globe, Mail, Phone, MapPin,
-  GraduationCap, Code2, Briefcase, Star, Download, ArrowLeft,
-  CheckCircle2, ExternalLink, ChevronRight, ChevronLeft, Sparkles,
-  Eye, FileText, Zap, Palette, Rocket, Check, Wand2
+  User,
+  Github,
+  Linkedin,
+  Globe,
+  Mail,
+  Phone,
+  MapPin,
+  GraduationCap,
+  Code2,
+  Briefcase,
+  Star,
+  Download,
+  ArrowLeft,
+  CheckCircle2,
+  ExternalLink,
+  ChevronRight,
+  ChevronLeft,
+  Sparkles,
+  Eye,
+  FileText,
+  Zap,
+  Palette,
+  Rocket,
+  Check,
+  Wand2,
 } from 'lucide-react'
+
+// -----------------------------------------------------------------------------
+// Constants
+// -----------------------------------------------------------------------------
 
 const STEPS = [
   { id: 0, label: 'Personal', icon: User },
@@ -22,22 +47,28 @@ const STEPS = [
   { id: 4, label: 'Preview', icon: Eye },
 ]
 
+// -----------------------------------------------------------------------------
+// Floating particles (hydration safe – random only in useEffect)
+// -----------------------------------------------------------------------------
+
 function FloatingParticles() {
   const [particles, setParticles] = useState<any[]>([])
 
   useEffect(() => {
-    const generated = [...Array(8)].map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      color: i % 3 === 0 ? '#6366f1' : i % 3 === 1 ? '#8b5cf6' : '#06b6d4',
-      duration: 7,
-      delay: i * 0.2,
-      size: 1,
-    }))
-
+    const generated = [
+      { id: 0, left: '12%', top: '18%', color: '#6366f1', duration: 7, delay: 0, size: 1 },
+      { id: 1, left: '28%', top: '35%', color: '#8b5cf6', duration: 7, delay: 0.2, size: 1 },
+      { id: 2, left: '44%', top: '62%', color: '#06b6d4', duration: 7, delay: 0.4, size: 1 },
+      { id: 3, left: '58%', top: '22%', color: '#6366f1', duration: 7, delay: 0.6, size: 1 },
+      { id: 4, left: '72%', top: '48%', color: '#8b5cf6', duration: 7, delay: 0.8, size: 1 },
+      { id: 5, left: '84%', top: '70%', color: '#06b6d4', duration: 7, delay: 1.0, size: 1 },
+      { id: 6, left: '35%', top: '80%', color: '#6366f1', duration: 7, delay: 1.2, size: 1 },
+      { id: 7, left: '90%', top: '15%', color: '#8b5cf6', duration: 7, delay: 1.4, size: 1 },
+    ]
     setParticles(generated)
   }, [])
+
+  if (particles.length === 0) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -52,15 +83,12 @@ function FloatingParticles() {
             height: p.size,
             background: `radial-gradient(circle, ${p.color}, transparent)`,
           }}
-          animate={{
-            y: [0, -15, 0],
-            opacity: [0, 0.3, 0],
-          }}
+          animate={{ y: [0, -15, 0], opacity: [0, 0.3, 0] }}
           transition={{
             duration: p.duration,
             repeat: Infinity,
             delay: p.delay,
-            ease: "easeInOut",
+            ease: 'easeInOut',
           }}
         />
       ))}
@@ -68,16 +96,36 @@ function FloatingParticles() {
   )
 }
 
-function generatePortfolioHTML(data: any): string {
-  const { name, email, phone, location, github, linkedin, website, summary,
-          skills, education, experience, projects, template } = data
+// -----------------------------------------------------------------------------
+// HTML generator (unchanged business logic)
+// -----------------------------------------------------------------------------
 
-  const skillList: string[] = typeof skills === 'string'
-    ? skills.split(',').map((s: string) => s.trim()).filter(Boolean)
-    : skills || []
+function generatePortfolioHTML(data: any): string {
+  const {
+    name,
+    email,
+    phone,
+    location,
+    github,
+    linkedin,
+    website,
+    summary,
+    skills,
+    education,
+    experience,
+    projects,
+    template,
+  } = data
+
+  const skillList: string[] =
+    typeof skills === 'string'
+      ? skills
+          .split(',')
+          .map((s: string) => s.trim())
+          .filter(Boolean)
+      : skills || []
 
   const templates: Record<string, string> = {
-
     modern: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -274,6 +322,10 @@ ${experience ? `
   return templates[template] || templates.modern
 }
 
+// -----------------------------------------------------------------------------
+// Page component
+// -----------------------------------------------------------------------------
+
 export default function DetailsPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -288,22 +340,34 @@ export default function DetailsPage() {
   const previewRef = useRef<HTMLIFrameElement>(null)
 
   const [personal, setPersonal] = useState({
-    name: '', email: '', phone: '', location: '',
-    github: username, linkedin: '', website: '', summary: '',
+    name: '',
+    email: '',
+    phone: '',
+    location: '',
+    github: username,
+    linkedin: '',
+    website: '',
+    summary: '',
   })
 
   const [education, setEducation] = useState({
-    college: '', degree: 'B.Tech', cgpa: '', year: '', branch: '',
+    college: '',
+    degree: 'B.Tech',
+    cgpa: '',
+    year: '',
+    branch: '',
   })
 
   const [skills, setSkills] = useState('')
   const [experience, setExperience] = useState('')
-  const [projectDetails, setProjectDetails] = useState<Record<string, { description: string; techStack: string }>>({})
+  const [projectDetails, setProjectDetails] = useState<
+    Record<string, { description: string; techStack: string }>
+  >({})
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem('user') || '{}')
     const gh = localStorage.getItem('githubUsername') || username
-    setPersonal(prev => ({
+    setPersonal((prev) => ({
       ...prev,
       name: storedUser.name || '',
       email: storedUser.email || '',
@@ -314,17 +378,22 @@ export default function DetailsPage() {
     if (saved) {
       setRepos(JSON.parse(saved))
     } else if (gh) {
-      fetch(`http://localhost:5000/api/github/${gh}`)
-        .then(r => r.json())
-        .then(d => { if (Array.isArray(d)) { setRepos(d); sessionStorage.setItem('githubRepos', JSON.stringify(d)) } })
-        .catch(() => { })
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/github/${gh}`)
+        .then((r) => r.json())
+        .then((d) => {
+          if (Array.isArray(d)) {
+            setRepos(d)
+            sessionStorage.setItem('githubRepos', JSON.stringify(d))
+          }
+        })
+        .catch(() => {})
     }
   }, [username])
 
   const toggleProject = (repo: any) => {
-    setSelectedProjects(prev => {
-      const exists = prev.find(p => p.name === repo.name)
-      if (exists) return prev.filter(p => p.name !== repo.name)
+    setSelectedProjects((prev) => {
+      const exists = prev.find((p) => p.name === repo.name)
+      if (exists) return prev.filter((p) => p.name !== repo.name)
       if (prev.length >= 2) return prev
       return [...prev, repo]
     })
@@ -332,7 +401,7 @@ export default function DetailsPage() {
 
   const handleGenerate = () => {
     setGenerating(true)
-    const projects = selectedProjects.map(p => ({
+    const projects = selectedProjects.map((p) => ({
       ...p,
       description: projectDetails[p.name]?.description || p.description || '',
       techStack: projectDetails[p.name]?.techStack || p.language || '',
@@ -353,101 +422,134 @@ export default function DetailsPage() {
   }
 
   const handleDownload = () => {
-    fetch('http://localhost:5000/api/analytics/download', { method: 'POST' }).catch(() => { })
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analytics/download`, {
+      method: 'POST',
+    }).catch(() => {})
     const blob = new Blob([generatedHTML], { type: 'text/html' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `${personal.name?.replace(/\s+/g, '-').toLowerCase() || 'portfolio'}-portfolio.html`
+    a.download = `${
+      personal.name?.replace(/\s+/g, '-').toLowerCase() || 'portfolio'
+    }-portfolio.html`
     a.click()
     URL.revokeObjectURL(url)
   }
 
-  const next = () => setStep(s => Math.min(s + 1, 4))
-  const prev = () => setStep(s => Math.max(s - 1, 0))
+  const next = () => setStep((s) => Math.min(s + 1, 4))
+  const prev = () => setStep((s) => Math.max(s - 1, 0))
 
-  const inputCls = "h-11 bg-white/5 border-white/10 focus:border-primary/50 focus:bg-white/10 rounded-xl transition-all text-sm"
-  const labelCls = "text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 block"
+  const inputCls =
+    'h-11 bg-muted/50 border-border focus:border-primary/50 rounded-xl transition-all text-sm'
+  const labelCls =
+    'text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1.5 block'
 
   return (
-    <div className="relative min-h-screen bg-[#030712]">
+    <div className="relative min-h-screen bg-background">
       <FloatingParticles />
-      
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.08),transparent_70%)]" />
+
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.04),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.08),transparent_70%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:64px_64px]" />
 
-      {/* Header */}
-      <div className="relative z-10 sticky top-0 border-b border-white/5 bg-[#030712]/90 backdrop-blur-xl">
+      {/* ── Top bar ── */}
+      <div className="relative z-10 sticky top-0 border-b border-border bg-background/90 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => router.back()}
-              className="h-10 w-10 rounded-xl hover:bg-white/5 flex items-center justify-center transition-colors text-gray-400 hover:text-white"
+              className="h-10 w-10 rounded-xl hover:bg-muted flex items-center justify-center transition-colors text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <div>
               <div className="flex items-center gap-2">
-                <p className="font-bold text-white">Portfolio Builder</p>
+                <p className="font-bold text-foreground">Portfolio Builder</p>
                 <Badge className="bg-primary/10 text-primary border-primary/20 text-xs capitalize">
                   {templateId}
                 </Badge>
               </div>
-              <p className="text-xs text-gray-500">Step {step + 1} of {STEPS.length}</p>
+              <p className="text-xs text-muted-foreground">
+                Step {step + 1} of {STEPS.length}
+              </p>
             </div>
           </div>
-          <Badge className="bg-white/5 text-gray-400 border-white/10 text-xs">
+          <Badge className="bg-muted/50 text-muted-foreground border-border text-xs">
             {STEPS[step].label}
           </Badge>
         </div>
       </div>
 
-      {/* Step Progress Bar */}
+      {/* ── Step progress ── */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 pt-8">
         <div className="flex items-center gap-0">
           {STEPS.map((s, i) => (
             <div key={s.id} className="flex items-center flex-1 last:flex-none">
               <div className="flex flex-col items-center">
-                <div className={`h-10 w-10 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                  i < step
-                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                    : i === step
-                    ? 'bg-primary/20 text-primary border-2 border-primary/50 shadow-lg shadow-primary/10'
-                    : 'bg-white/5 text-gray-600 border border-white/10'
-                }`}>
-                  {i < step ? <CheckCircle2 className="h-5 w-5" /> : s.icon && <s.icon className="h-4 w-4" />}
+                <div
+                  className={`h-10 w-10 rounded-xl flex items-center justify-center text-xs font-bold transition-all duration-300 ${
+                    i < step
+                      ? 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-500 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-500/30'
+                      : i === step
+                      ? 'bg-primary/10 dark:bg-primary/20 text-primary border-2 border-primary/50 shadow-lg shadow-primary/10'
+                      : 'bg-muted/50 text-muted-foreground border border-border'
+                  }`}
+                >
+                  {i < step ? (
+                    <CheckCircle2 className="h-5 w-5" />
+                  ) : (
+                    s.icon && <s.icon className="h-4 w-4" />
+                  )}
                 </div>
-                <span className={`text-[10px] mt-2 font-semibold ${
-                  i === step ? 'text-primary' : i < step ? 'text-emerald-400' : 'text-gray-600'
-                }`}>
+                <span
+                  className={`text-[10px] mt-2 font-semibold ${
+                    i === step
+                      ? 'text-primary'
+                      : i < step
+                      ? 'text-emerald-500 dark:text-emerald-400'
+                      : 'text-muted-foreground'
+                  }`}
+                >
                   {s.label}
                 </span>
               </div>
               {i < STEPS.length - 1 && (
-                <div className={`flex-1 h-0.5 mx-3 mb-5 transition-all duration-500 ${
-                  i < step ? 'bg-emerald-500/50' : 'bg-white/5'
-                }`} />
+                <div
+                  className={`flex-1 h-0.5 mx-3 mb-5 transition-all duration-500 ${
+                    i < step ? 'bg-emerald-500/50' : 'bg-border'
+                  }`}
+                />
               )}
             </div>
           ))}
         </div>
       </div>
 
+      {/* ── Step content ── */}
       <div className="relative z-10 max-w-2xl mx-auto px-6 py-10">
         <AnimatePresence mode="wait">
-          {/* STEP 0: Personal */}
+          {/* STEP 0 – Personal */}
           {step === 0 && (
-            <motion.div key="step0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Card className="relative overflow-hidden border-2 border-white/5 bg-gradient-to-br from-gray-900/80 to-gray-800/60 backdrop-blur-xl shadow-2xl">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.08),transparent_70%)]" />
+            <motion.div
+              key="step0"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Card className="relative overflow-hidden border-2 border-border bg-card shadow-2xl">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.04),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_0%,rgba(99,102,241,0.08),transparent_70%)]" />
                 <div className="relative p-7 md:p-8 space-y-6">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="h-12 w-12 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                      <User className="h-6 w-6 text-blue-400" />
+                    <div className="h-12 w-12 rounded-2xl bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center border border-blue-300 dark:border-blue-500/20">
+                      <User className="h-6 w-6 text-blue-500 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">Personal Information</h2>
-                      <p className="text-xs text-gray-400">Tell us about yourself</p>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Personal Information
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Tell us about yourself
+                      </p>
                     </div>
                   </div>
 
@@ -459,44 +561,52 @@ export default function DetailsPage() {
                       { label: 'Location', key: 'location', ph: 'Hyderabad, India', icon: MapPin },
                       { label: 'GitHub Username', key: 'github', ph: 'johndoe', icon: Github },
                       { label: 'LinkedIn URL', key: 'linkedin', ph: 'linkedin.com/in/john', icon: Linkedin },
-                    ].map(f => (
+                    ].map((f) => (
                       <div key={f.key}>
                         <label className="flex items-center gap-2 mb-2">
-                          <f.icon className="h-3 w-3 text-gray-500" />
+                          <f.icon className="h-3 w-3 text-muted-foreground" />
                           <span className={labelCls}>{f.label}</span>
                         </label>
                         <Input
                           className={inputCls}
                           value={(personal as any)[f.key]}
-                          onChange={e => setPersonal(p => ({ ...p, [f.key]: e.target.value }))}
+                          onChange={(e) =>
+                            setPersonal((p) => ({ ...p, [f.key]: e.target.value }))
+                          }
                           placeholder={f.ph}
                         />
                       </div>
                     ))}
                     <div className="sm:col-span-2">
                       <label className="flex items-center gap-2 mb-2">
-                        <Globe className="h-3 w-3 text-gray-500" />
+                        <Globe className="h-3 w-3 text-muted-foreground" />
                         <span className={labelCls}>Portfolio Website</span>
                       </label>
                       <Input
                         className={inputCls}
                         value={personal.website}
-                        onChange={e => setPersonal(p => ({ ...p, website: e.target.value }))}
+                        onChange={(e) =>
+                          setPersonal((p) => ({ ...p, website: e.target.value }))
+                        }
                         placeholder="johndoe.dev"
                       />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="flex items-center gap-2 mb-2">
-                        <FileText className="h-3 w-3 text-gray-500" />
+                        <FileText className="h-3 w-3 text-muted-foreground" />
                         <span className={labelCls}>Professional Summary</span>
                       </label>
                       <textarea
-                        className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-primary/50 focus:bg-white/10 min-h-28 transition-all"
+                        className="w-full p-4 bg-muted/50 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary/50 min-h-28 transition-all"
                         value={personal.summary}
-                        onChange={e => setPersonal(p => ({ ...p, summary: e.target.value }))}
+                        onChange={(e) =>
+                          setPersonal((p) => ({ ...p, summary: e.target.value }))
+                        }
                         placeholder="B.Tech CSE student passionate about full-stack development and open-source..."
                       />
-                      <p className="text-xs text-gray-600 mt-2">{personal.summary.length}/300</p>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {personal.summary.length}/300
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -504,18 +614,28 @@ export default function DetailsPage() {
             </motion.div>
           )}
 
-          {/* STEP 1: Education */}
+          {/* STEP 1 – Education */}
           {step === 1 && (
-            <motion.div key="step1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Card className="relative overflow-hidden border-2 border-white/5 bg-gradient-to-br from-gray-900/80 to-gray-800/60 backdrop-blur-xl shadow-2xl">
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Card className="relative overflow-hidden border-2 border-border bg-card shadow-2xl">
                 <div className="relative p-7 md:p-8 space-y-6">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                      <GraduationCap className="h-6 w-6 text-emerald-400" />
+                    <div className="h-12 w-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center border border-emerald-300 dark:border-emerald-500/20">
+                      <GraduationCap className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">Education Details</h2>
-                      <p className="text-xs text-gray-400">Your academic background</p>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Education Details
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Your academic background
+                      </p>
                     </div>
                   </div>
 
@@ -526,13 +646,15 @@ export default function DetailsPage() {
                       { label: 'Branch / Major', key: 'branch', ph: 'Computer Science Engineering' },
                       { label: 'CGPA / Percentage *', key: 'cgpa', ph: '8.5 / 10' },
                       { label: 'Graduation Year', key: 'year', ph: '2026' },
-                    ].map(f => (
+                    ].map((f) => (
                       <div key={f.key} className={f.full ? 'sm:col-span-2' : ''}>
                         <label className={labelCls}>{f.label}</label>
                         <Input
                           className={inputCls}
                           value={(education as any)[f.key]}
-                          onChange={e => setEducation(p => ({ ...p, [f.key]: e.target.value }))}
+                          onChange={(e) =>
+                            setEducation((p) => ({ ...p, [f.key]: e.target.value }))
+                          }
                           placeholder={f.ph}
                         />
                       </div>
@@ -540,12 +662,16 @@ export default function DetailsPage() {
                   </div>
 
                   <div>
-                    <label className={labelCls}>Work Experience / Internships (optional)</label>
+                    <label className={labelCls}>
+                      Work Experience / Internships (optional)
+                    </label>
                     <textarea
-                      className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-primary/50 focus:bg-white/10 min-h-28 transition-all"
+                      className="w-full p-4 bg-muted/50 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary/50 min-h-28 transition-all"
                       value={experience}
-                      onChange={e => setExperience(e.target.value)}
-                      placeholder={"Software Intern @ XYZ Corp (June 2024 - Aug 2024)\n- Built REST APIs using Node.js\n- Collaborated with frontend team on React features"}
+                      onChange={(e) => setExperience(e.target.value)}
+                      placeholder={
+                        'Software Intern @ XYZ Corp (June 2024 - Aug 2024)\n- Built REST APIs using Node.js\n- Collaborated with frontend team on React features'
+                      }
                     />
                   </div>
                 </div>
@@ -553,27 +679,37 @@ export default function DetailsPage() {
             </motion.div>
           )}
 
-          {/* STEP 2: Skills */}
+          {/* STEP 2 – Skills */}
           {step === 2 && (
-            <motion.div key="step2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Card className="relative overflow-hidden border-2 border-white/5 bg-gradient-to-br from-gray-900/80 to-gray-800/60 backdrop-blur-xl shadow-2xl">
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Card className="relative overflow-hidden border-2 border-border bg-card shadow-2xl">
                 <div className="relative p-7 md:p-8 space-y-6">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="h-12 w-12 rounded-2xl bg-violet-500/10 flex items-center justify-center border border-violet-500/20">
-                      <Code2 className="h-6 w-6 text-violet-400" />
+                    <div className="h-12 w-12 rounded-2xl bg-violet-100 dark:bg-violet-500/10 flex items-center justify-center border border-violet-300 dark:border-violet-500/20">
+                      <Code2 className="h-6 w-6 text-violet-500 dark:text-violet-400" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">Technical Skills</h2>
-                      <p className="text-xs text-gray-400">Technologies you work with</p>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Technical Skills
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Technologies you work with
+                      </p>
                     </div>
                   </div>
 
                   <div>
                     <label className={labelCls}>Skills (comma-separated) *</label>
                     <textarea
-                      className="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-primary/50 focus:bg-white/10 min-h-32 transition-all"
+                      className="w-full p-4 bg-muted/50 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary/50 min-h-32 transition-all"
                       value={skills}
-                      onChange={e => setSkills(e.target.value)}
+                      onChange={(e) => setSkills(e.target.value)}
                       placeholder="React, TypeScript, Node.js, Express, MongoDB, Python, MySQL, Git, AWS, Docker, TailwindCSS, Next.js..."
                     />
                   </div>
@@ -581,23 +717,34 @@ export default function DetailsPage() {
                   {skills && (
                     <div>
                       <label className={labelCls}>Preview</label>
-                      <div className="flex flex-wrap gap-2 p-5 bg-white/5 border border-white/10 rounded-2xl">
-                        {skills.split(',').map(s => s.trim()).filter(Boolean).map((s, i) => (
-                          <Badge key={i} className="px-3 py-1.5 bg-violet-500/10 text-violet-300 border border-violet-500/20 text-xs">
-                            {s}
-                          </Badge>
-                        ))}
+                      <div className="flex flex-wrap gap-2 p-5 bg-muted/30 border border-border rounded-2xl">
+                        {skills
+                          .split(',')
+                          .map((s) => s.trim())
+                          .filter(Boolean)
+                          .map((s, i) => (
+                            <Badge
+                              key={i}
+                              className="px-3 py-1.5 bg-violet-100 dark:bg-violet-500/10 text-violet-600 dark:text-violet-300 border border-violet-300 dark:border-violet-500/20 text-xs"
+                            >
+                              {s}
+                            </Badge>
+                          ))}
                       </div>
                     </div>
                   )}
 
-                  <div className="p-5 rounded-2xl bg-gradient-to-r from-violet-500/5 to-purple-500/5 border border-violet-500/20">
+                  <div className="p-5 rounded-2xl bg-violet-50 dark:bg-violet-500/5 border border-violet-200 dark:border-violet-500/20">
                     <div className="flex items-center gap-2 mb-2">
-                      <Wand2 className="h-4 w-4 text-violet-400" />
-                      <p className="text-sm font-semibold text-violet-400">Pro Tip</p>
+                      <Wand2 className="h-4 w-4 text-violet-500 dark:text-violet-400" />
+                      <p className="text-sm font-semibold text-violet-600 dark:text-violet-400">
+                        Pro Tip
+                      </p>
                     </div>
-                    <p className="text-xs text-gray-400 leading-relaxed">
-                      Include languages, frameworks, databases, dev tools, and cloud platforms. The more relevant skills, the better your portfolio looks to recruiters.
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Include languages, frameworks, databases, dev tools, and cloud
+                      platforms. The more relevant skills, the better your portfolio
+                      looks to recruiters.
                     </p>
                   </div>
                 </div>
@@ -605,97 +752,153 @@ export default function DetailsPage() {
             </motion.div>
           )}
 
-          {/* STEP 3: Projects */}
+          {/* STEP 3 – Projects */}
           {step === 3 && (
-            <motion.div key="step3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Card className="relative overflow-hidden border-2 border-white/5 bg-gradient-to-br from-gray-900/80 to-gray-800/60 backdrop-blur-xl shadow-2xl">
+            <motion.div
+              key="step3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              <Card className="relative overflow-hidden border-2 border-border bg-card shadow-2xl">
                 <div className="relative p-7 md:p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="h-12 w-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                      <Briefcase className="h-6 w-6 text-cyan-400" />
+                    <div className="h-12 w-12 rounded-2xl bg-cyan-100 dark:bg-cyan-500/10 flex items-center justify-center border border-cyan-300 dark:border-cyan-500/20">
+                      <Briefcase className="h-6 w-6 text-cyan-500 dark:text-cyan-400" />
                     </div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">Select Projects</h2>
-                      <p className="text-xs text-gray-400">Choose 2 featured projects</p>
+                      <h2 className="text-xl font-bold text-foreground">
+                        Select Projects
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        Choose 2 featured projects
+                      </p>
                     </div>
-                    <Badge className="ml-auto bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
+                    <Badge className="ml-auto bg-cyan-100 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-300 dark:border-cyan-500/20">
                       {selectedProjects.length}/2
                     </Badge>
                   </div>
 
                   {repos.length === 0 ? (
-                    <div className="text-center py-12 border-2 border-dashed border-white/10 rounded-2xl">
-                      <Github className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                      <p className="font-semibold text-gray-400 mb-2">No repositories found</p>
-                      <p className="text-sm text-gray-600 mb-6">Enter your GitHub username in Step 1</p>
+                    <div className="text-center py-12 border-2 border-dashed border-border rounded-2xl">
+                      <Github className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="font-semibold text-muted-foreground mb-2">
+                        No repositories found
+                      </p>
+                      <p className="text-sm text-muted-foreground mb-6">
+                        Enter your GitHub username in Step 1
+                      </p>
                     </div>
                   ) : (
                     <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2">
-                      {repos.sort((a, b) => (b.stars || 0) - (a.stars || 0)).map((repo, i) => {
-                        const isSelected = !!selectedProjects.find(p => p.name === repo.name)
-                        const isDisabled = !isSelected && selectedProjects.length >= 2
-                        return (
-                          <div
-                            key={i}
-                            onClick={() => !isDisabled && toggleProject(repo)}
-                            className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
-                              isSelected
-                                ? 'border-cyan-500/60 bg-cyan-500/5'
-                                : isDisabled
-                                ? 'border-white/5 opacity-30 cursor-not-allowed'
-                                : 'border-white/5 bg-white/[0.02] hover:border-white/10 hover:bg-white/[0.04]'
-                            }`}
-                          >
-                            <div className="flex items-start gap-4">
-                              <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-                                isSelected ? 'border-cyan-500 bg-cyan-500' : 'border-gray-700'
-                              }`}>
-                                {isSelected && <Check className="h-3.5 w-3.5 text-white" />}
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                                  <span className={`font-bold text-sm ${isSelected ? 'text-cyan-300' : 'text-gray-200'}`}>
-                                    {repo.name}
-                                  </span>
-                                  {repo.language && (
-                                    <Badge className="text-[10px] px-2 py-0 bg-white/5 border-white/10 text-gray-400">
-                                      {repo.language}
-                                    </Badge>
-                                  )}
-                                  {repo.stars > 0 && (
-                                    <span className="text-xs text-yellow-400 flex items-center gap-1">
-                                      <Star className="h-3 w-3 fill-current" />{repo.stars}
-                                    </span>
+                      {repos
+                        .sort((a, b) => (b.stars || 0) - (a.stars || 0))
+                        .map((repo, i) => {
+                          const isSelected = !!selectedProjects.find(
+                            (p) => p.name === repo.name,
+                          )
+                          const isDisabled = !isSelected && selectedProjects.length >= 2
+                          return (
+                            <div
+                              key={i}
+                              onClick={() => !isDisabled && toggleProject(repo)}
+                              className={`p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'border-cyan-500/60 bg-cyan-50 dark:bg-cyan-500/5'
+                                  : isDisabled
+                                  ? 'border-border opacity-30 cursor-not-allowed'
+                                  : 'border-border bg-muted/30 hover:border-primary/30 hover:bg-muted/50'
+                              }`}
+                            >
+                              <div className="flex items-start gap-4">
+                                <div
+                                  className={`h-6 w-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
+                                    isSelected
+                                      ? 'border-cyan-500 bg-cyan-500'
+                                      : 'border-border'
+                                  }`}
+                                >
+                                  {isSelected && (
+                                    <Check className="h-3.5 w-3.5 text-white" />
                                   )}
                                 </div>
-                                <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
-                                  {repo.description || 'No description available'}
-                                </p>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                                    <span
+                                      className={`font-bold text-sm ${
+                                        isSelected
+                                          ? 'text-cyan-600 dark:text-cyan-300'
+                                          : 'text-foreground'
+                                      }`}
+                                    >
+                                      {repo.name}
+                                    </span>
+                                    {repo.language && (
+                                      <Badge className="text-[10px] px-2 py-0 bg-muted/50 border-border text-muted-foreground">
+                                        {repo.language}
+                                      </Badge>
+                                    )}
+                                    {repo.stars > 0 && (
+                                      <span className="text-xs text-yellow-500 dark:text-yellow-400 flex items-center gap-1">
+                                        <Star className="h-3 w-3 fill-current" />
+                                        {repo.stars}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                                    {repo.description || 'No description available'}
+                                  </p>
+                                </div>
+                                {repo.url && (
+                                  <a
+                                    href={repo.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="flex-shrink-0"
+                                  >
+                                    <ExternalLink className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                                  </a>
+                                )}
                               </div>
-                              {repo.url && (
-                                <a href={repo.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} className="flex-shrink-0">
-                                  <ExternalLink className="h-4 w-4 text-gray-600 hover:text-gray-400" />
-                                </a>
-                              )}
                             </div>
-                          </div>
-                        )
-                      })}
+                          )
+                        })}
                     </div>
                   )}
 
                   {selectedProjects.length > 0 && (
-                    <div className="mt-6 space-y-4 border-t border-white/10 pt-6">
-                      <p className="text-sm font-semibold text-gray-300">Customize Descriptions</p>
-                      {selectedProjects.map(p => (
-                        <div key={p.name} className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-3">
-                          <p className="font-medium text-sm text-cyan-400">{p.name}</p>
+                    <div className="mt-6 space-y-4 border-t border-border pt-6">
+                      <p className="text-sm font-semibold text-foreground">
+                        Customize Descriptions
+                      </p>
+                      {selectedProjects.map((p) => (
+                        <div
+                          key={p.name}
+                          className="p-5 rounded-2xl bg-muted/30 border border-border space-y-3"
+                        >
+                          <p className="font-medium text-sm text-cyan-600 dark:text-cyan-400">
+                            {p.name}
+                          </p>
                           <div>
                             <label className={labelCls}>Description</label>
                             <textarea
-                              className="w-full p-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-gray-500 resize-none focus:outline-none focus:border-primary/50 min-h-20 transition-all"
-                              value={projectDetails[p.name]?.description ?? (p.description || '')}
-                              onChange={e => setProjectDetails(prev => ({ ...prev, [p.name]: { ...prev[p.name], description: e.target.value } }))}
+                              className="w-full p-3 bg-muted/50 border border-border rounded-xl text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:border-primary/50 min-h-20 transition-all"
+                              value={
+                                projectDetails[p.name]?.description ??
+                                p.description ??
+                                ''
+                              }
+                              onChange={(e) =>
+                                setProjectDetails((prev) => ({
+                                  ...prev,
+                                  [p.name]: {
+                                    ...prev[p.name],
+                                    description: e.target.value,
+                                  },
+                                }))
+                              }
                               placeholder="Describe the project and its impact..."
                             />
                           </div>
@@ -703,8 +906,20 @@ export default function DetailsPage() {
                             <label className={labelCls}>Tech Stack</label>
                             <Input
                               className={inputCls}
-                              value={projectDetails[p.name]?.techStack ?? (p.language || '')}
-                              onChange={e => setProjectDetails(prev => ({ ...prev, [p.name]: { ...prev[p.name], techStack: e.target.value } }))}
+                              value={
+                                projectDetails[p.name]?.techStack ??
+                                p.language ??
+                                ''
+                              }
+                              onChange={(e) =>
+                                setProjectDetails((prev) => ({
+                                  ...prev,
+                                  [p.name]: {
+                                    ...prev[p.name],
+                                    techStack: e.target.value,
+                                  },
+                                }))
+                              }
                               placeholder="React, Node.js, MongoDB..."
                             />
                           </div>
@@ -717,41 +932,61 @@ export default function DetailsPage() {
             </motion.div>
           )}
 
-          {/* STEP 4: Preview */}
+          {/* STEP 4 – Preview */}
           {step === 4 && generatedHTML && (
-            <motion.div key="step4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            <motion.div
+              key="step4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
               <div className="space-y-5">
-                <Card className="relative overflow-hidden border-2 border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 via-gray-900/80 to-gray-800/60 backdrop-blur-xl shadow-2xl">
+                <Card className="relative overflow-hidden border-2 border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/5 shadow-2xl">
                   <div className="relative p-6 flex items-center justify-between flex-wrap gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="h-12 w-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-                        <Rocket className="h-6 w-6 text-emerald-400" />
+                      <div className="h-12 w-12 rounded-2xl bg-emerald-100 dark:bg-emerald-500/10 flex items-center justify-center border border-emerald-300 dark:border-emerald-500/20">
+                        <Rocket className="h-6 w-6 text-emerald-500 dark:text-emerald-400" />
                       </div>
                       <div>
-                        <h2 className="font-bold text-lg text-white">Portfolio Ready!</h2>
-                        <p className="text-sm text-gray-400">Download and open in browser. Print to save as PDF.</p>
+                        <h2 className="font-bold text-lg text-foreground">
+                          Portfolio Ready!
+                        </h2>
+                        <p className="text-sm text-muted-foreground">
+                          Download and open in browser. Print to save as PDF.
+                        </p>
                       </div>
                     </div>
                     <div className="flex gap-3">
-                      <Button variant="outline" onClick={() => setStep(3)} className="border-white/10 hover:border-white/20 rounded-xl">
+                      <Button
+                        variant="outline"
+                        onClick={() => setStep(3)}
+                        className="border-border hover:border-primary/30 rounded-xl"
+                      >
                         <ArrowLeft className="h-4 w-4 mr-2" /> Edit
                       </Button>
-                      <Button onClick={handleDownload} size="lg" className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-xl shadow-emerald-500/25 rounded-xl">
+                      <Button
+                        onClick={handleDownload}
+                        size="lg"
+                        className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-xl shadow-emerald-500/25 rounded-xl"
+                      >
                         <Download className="h-4 w-4 mr-2" /> Download HTML
                       </Button>
                     </div>
                   </div>
                 </Card>
 
-                <div className="border-2 border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-                  <div className="flex items-center gap-2 px-5 py-3 bg-white/5 border-b border-white/10">
+                <div className="border-2 border-border rounded-2xl overflow-hidden shadow-2xl">
+                  <div className="flex items-center gap-2 px-5 py-3 bg-muted/30 border-b border-border">
                     <div className="flex gap-1.5">
                       <div className="h-3 w-3 rounded-full bg-red-400/80" />
                       <div className="h-3 w-3 rounded-full bg-yellow-400/80" />
                       <div className="h-3 w-3 rounded-full bg-green-400/80" />
                     </div>
-                    <p className="text-xs text-gray-500 ml-2 font-mono">portfolio.html</p>
-                    <Badge className="ml-auto bg-white/5 text-gray-400 border-white/10 text-xs">
+                    <p className="text-xs text-muted-foreground ml-2 font-mono">
+                      portfolio.html
+                    </p>
+                    <Badge className="ml-auto bg-muted/50 text-muted-foreground border-border text-xs">
                       <Eye className="h-3 w-3 mr-1" /> Live Preview
                     </Badge>
                   </div>
@@ -768,28 +1003,39 @@ export default function DetailsPage() {
           )}
         </AnimatePresence>
 
-        {/* Navigation Buttons */}
+        {/* ── Navigation buttons ── */}
         {step < 4 && (
           <div className="flex items-center justify-between mt-8">
             <Button
               variant="outline"
               onClick={prev}
               disabled={step === 0}
-              className="border-white/10 hover:border-white/20 bg-white/5 rounded-xl"
+              className="border-border hover:border-primary/30 bg-muted/50 rounded-xl"
             >
               <ChevronLeft className="h-4 w-4 mr-2" /> Back
             </Button>
 
             <div className="flex items-center gap-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className={`h-1.5 w-1.5 rounded-full transition-all ${
-                  i === step ? 'bg-primary w-4' : i < step ? 'bg-emerald-400' : 'bg-gray-700'
-                }`} />
+                <div
+                  key={i}
+                  className={`h-1.5 w-1.5 rounded-full transition-all ${
+                    i === step
+                      ? 'bg-primary w-4'
+                      : i < step
+                      ? 'bg-emerald-500'
+                      : 'bg-border'
+                  }`}
+                />
               ))}
             </div>
 
             {step < 3 ? (
-              <Button onClick={next} disabled={step === 0 && !personal.name} className="rounded-xl">
+              <Button
+                onClick={next}
+                disabled={step === 0 && !personal.name}
+                className="rounded-xl"
+              >
                 Next <ChevronRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
@@ -817,11 +1063,15 @@ export default function DetailsPage() {
         {step === 3 && (
           <p className="text-center text-sm mt-4">
             {selectedProjects.length === 0 ? (
-              <span className="text-yellow-400">Please select 2 projects to continue</span>
+              <span className="text-yellow-500 dark:text-yellow-400">
+                Please select 2 projects to continue
+              </span>
             ) : selectedProjects.length === 1 ? (
-              <span className="text-yellow-400">Please select 1 more project</span>
+              <span className="text-yellow-500 dark:text-yellow-400">
+                Please select 1 more project
+              </span>
             ) : (
-              <span className="text-emerald-400 flex items-center justify-center gap-2">
+              <span className="text-emerald-500 dark:text-emerald-400 flex items-center justify-center gap-2">
                 <CheckCircle2 className="h-4 w-4" /> Ready to generate!
               </span>
             )}

@@ -61,16 +61,37 @@ function FloatingParticles() {
   const [particles, setParticles] = useState<any[]>([])
 
   useEffect(() => {
-    const generated = [...Array(25)].map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      color: COLORS[i % COLORS.length],
-      duration: 3 + Math.random() * 4,
-      delay: Math.random() * 3,
-    }))
+    const generated = [
+      { id: 0, left: '12%', top: '18%', color: '#6366f1', duration: 7, delay: 0 },
+      { id: 1, left: '28%', top: '35%', color: '#8b5cf6', duration: 7, delay: 0.2 },
+      { id: 2, left: '44%', top: '62%', color: '#ec4899', duration: 7, delay: 0.4 },
+      { id: 3, left: '58%', top: '22%', color: '#f59e0b', duration: 7, delay: 0.6 },
+      { id: 4, left: '72%', top: '48%', color: '#10b981', duration: 7, delay: 0.8 },
+      { id: 5, left: '84%', top: '70%', color: '#f97316', duration: 7, delay: 1.0 },
+      { id: 6, left: '35%', top: '80%', color: '#06b6d4', duration: 7, delay: 1.2 },
+      { id: 7, left: '90%', top: '15%', color: '#84cc16', duration: 7, delay: 1.4 },
+      { id: 8, left: '15%', top: '45%', color: '#6366f1', duration: 7, delay: 1.6 },
+      { id: 9, left: '65%', top: '25%', color: '#8b5cf6', duration: 7, delay: 1.8 },
+      { id: 10, left: '25%', top: '55%', color: '#ec4899', duration: 7, delay: 2.0 },
+      { id: 11, left: '75%', top: '35%', color: '#f59e0b', duration: 7, delay: 2.2 },
+      { id: 12, left: '45%', top: '75%', color: '#10b981', duration: 7, delay: 2.4 },
+      { id: 13, left: '85%', top: '40%', color: '#f97316', duration: 7, delay: 2.6 },
+      { id: 14, left: '20%', top: '60%', color: '#06b6d4', duration: 7, delay: 2.8 },
+      { id: 15, left: '55%', top: '85%', color: '#84cc16', duration: 7, delay: 3.0 },
+      { id: 16, left: '70%', top: '20%', color: '#6366f1', duration: 7, delay: 3.2 },
+      { id: 17, left: '30%', top: '50%', color: '#8b5cf6', duration: 7, delay: 3.4 },
+      { id: 18, left: '60%', top: '30%', color: '#ec4899', duration: 7, delay: 3.6 },
+      { id: 19, left: '80%', top: '65%', color: '#f59e0b', duration: 7, delay: 3.8 },
+      { id: 20, left: '40%', top: '90%', color: '#10b981', duration: 7, delay: 4.0 },
+      { id: 21, left: '95%', top: '55%', color: '#f97316', duration: 7, delay: 4.2 },
+      { id: 22, left: '10%', top: '75%', color: '#06b6d4', duration: 7, delay: 4.4 },
+      { id: 23, left: '50%', top: '10%', color: '#84cc16', duration: 7, delay: 4.6 },
+      { id: 24, left: '78%', top: '88%', color: '#6366f1', duration: 7, delay: 4.8 },
+    ]
     setParticles(generated)
   }, [])
+
+  if (particles.length === 0) return null
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -128,7 +149,7 @@ export default function AnalyticsPage() {
     if (isRefresh) setRefreshing(true)
 
     try {
-      const analyticsRes = await fetch('http://localhost:5000/api/analytics')
+      const analyticsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analytics`)
       if (analyticsRes.ok) setAnalytics(await analyticsRes.json())
     } catch { /* backend might be cold */ }
 
@@ -139,7 +160,7 @@ export default function AnalyticsPage() {
       const username = localStorage.getItem('githubUsername')
       if (username) {
         try {
-          const res = await fetch(`http://localhost:5000/api/github/${username}`)
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/github/${username}`)
           if (res.ok) {
             const data = await res.json()
             if (Array.isArray(data)) { setRepos(data); sessionStorage.setItem('githubRepos', JSON.stringify(data)) }

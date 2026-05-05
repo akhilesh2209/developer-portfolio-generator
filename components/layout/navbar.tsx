@@ -70,8 +70,8 @@ export function Navbar() {
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${
       scrolled
-        ? 'border-b border-white/5 bg-[#030712]/90 backdrop-blur-xl shadow-2xl shadow-black/20'
-        : 'border-b border-transparent bg-[#030712]/80 backdrop-blur-lg'
+        ? 'border-b border-border bg-background/90 backdrop-blur-xl shadow-2xl shadow-black/10 dark:shadow-black/20'
+        : 'border-b border-transparent bg-background/80 backdrop-blur-lg'
     }`}>
       {/* Top gradient line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/30 to-transparent" />
@@ -80,15 +80,15 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
-            href={isLoggedIn ? '/dashboard' : '/'}
+            href={isLoggedIn ? '/' : '/'}
             className="flex items-center gap-3 group flex-shrink-0"
           >
             <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-shadow">
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div className="hidden sm:block">
-              <span className="font-black text-lg text-white tracking-tight">
-                Folio<span className="text-indigo-400">Forge</span>
+              <span className="font-black text-lg text-foreground tracking-tight">
+                Folio<span className="text-indigo-500 dark:text-indigo-400">Forge</span>
               </span>
             </div>
           </Link>
@@ -101,8 +101,8 @@ export function Navbar() {
                 href={item.href}
                 className={`relative px-4 py-2 text-sm font-medium rounded-xl transition-all ${
                   isActive(item.href)
-                    ? 'text-white bg-white/10'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'text-foreground bg-accent'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
               >
                 <span className="flex items-center gap-1.5">
@@ -110,7 +110,7 @@ export function Navbar() {
                   {item.label}
                 </span>
                 {isActive(item.href) && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-indigo-400 rounded-full" />
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-indigo-500 rounded-full" />
                 )}
               </Link>
             ))}
@@ -135,13 +135,13 @@ export function Navbar() {
                   size="sm"
                   variant="ghost"
                   onClick={() => router.push('/dashboard')}
-                  className="text-gray-400 hover:text-white hover:bg-white/5 rounded-xl"
+                  className="text-muted-foreground hover:text-foreground hover:bg-accent/50 rounded-xl"
                 >
                   Dashboard
                 </Button>
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-2 text-sm text-gray-500 hover:text-gray-400 rounded-xl hover:bg-white/5 transition-all"
+                  className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground rounded-xl hover:bg-accent/50 transition-all"
                 >
                   Sign Out
                 </button>
@@ -150,13 +150,13 @@ export function Navbar() {
               <div className="hidden md:flex items-center gap-2">
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white rounded-xl hover:bg-white/5 transition-all"
+                  className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground rounded-xl hover:bg-accent/50 transition-all"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/signup"
-                  className="px-5 py-2 text-sm font-semibold bg-white text-black rounded-xl hover:bg-gray-200 transition-all shadow-lg"
+                  className="px-5 py-2 text-sm font-semibold bg-foreground text-background rounded-xl hover:bg-foreground/90 transition-all shadow-lg"
                 >
                   Get Started
                 </Link>
@@ -166,7 +166,7 @@ export function Navbar() {
             {/* Mobile Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden h-10 w-10 rounded-xl border border-white/5 bg-white/[0.02] flex items-center justify-center text-gray-400 hover:text-white hover:border-white/10 transition-all"
+              className="md:hidden h-10 w-10 rounded-xl border border-border bg-muted/30 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -178,7 +178,7 @@ export function Navbar() {
         <div className={`md:hidden transition-all duration-300 overflow-hidden ${
           mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
         }`}>
-          <div className="border-t border-white/5 py-4 space-y-1">
+          <div className="border-t border-border py-4 space-y-1">
             {navLinks.map((item) => (
               <Link
                 key={item.href}
@@ -186,19 +186,19 @@ export function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive(item.href)
-                    ? 'text-white bg-white/10'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'text-foreground bg-accent'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
                 }`}
               >
                 <span className="text-base">{item.icon}</span>
                 {item.label}
                 {isActive(item.href) && (
-                  <span className="ml-auto h-2 w-2 rounded-full bg-indigo-400" />
+                  <span className="ml-auto h-2 w-2 rounded-full bg-indigo-500" />
                 )}
               </Link>
             ))}
 
-            <div className="pt-4 mt-4 border-t border-white/5 space-y-3 px-4">
+            <div className="pt-4 mt-4 border-t border-border space-y-3 px-4">
               {isLoggedIn ? (
                 <>
                   <Button
@@ -209,7 +209,7 @@ export function Navbar() {
                     Generate Portfolio
                   </Button>
                   <Button
-                    className="w-full border-white/10 bg-white/5 rounded-xl"
+                    className="w-full border-border bg-muted/50 rounded-xl"
                     variant="outline"
                     onClick={() => { router.push('/dashboard'); setMobileMenuOpen(false) }}
                   >
@@ -217,7 +217,7 @@ export function Navbar() {
                   </Button>
                   <button
                     onClick={handleLogout}
-                    className="w-full py-3 text-sm text-gray-500 hover:text-gray-400 rounded-xl hover:bg-white/5 transition-all text-center"
+                    className="w-full py-3 text-sm text-muted-foreground hover:text-foreground rounded-xl hover:bg-accent/50 transition-all text-center"
                   >
                     Sign Out
                   </button>
@@ -227,14 +227,14 @@ export function Navbar() {
                   <Link
                     href="/signup"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full py-3 text-center text-sm font-semibold bg-white text-black rounded-xl hover:bg-gray-200 transition-all"
+                    className="block w-full py-3 text-center text-sm font-semibold bg-foreground text-background rounded-xl hover:bg-foreground/90 transition-all"
                   >
                     Get Started Free
                   </Link>
                   <Link
                     href="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full py-3 text-center text-sm font-medium text-gray-400 hover:text-white rounded-xl hover:bg-white/5 transition-all border border-white/5"
+                    className="block w-full py-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground rounded-xl hover:bg-accent/50 transition-all border border-border"
                   >
                     Sign In
                   </Link>
