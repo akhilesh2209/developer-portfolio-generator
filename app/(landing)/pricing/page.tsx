@@ -52,6 +52,7 @@ export default function PricingPage() {
       border: 'border-emerald-200 dark:border-emerald-500/20',
       gradient: 'from-emerald-50 to-green-50 dark:from-emerald-500/5 dark:to-green-500/5',
       badge: null,
+      href: '/',
       features: [
         '1 Portfolio site',
         '3 Free templates',
@@ -76,6 +77,7 @@ export default function PricingPage() {
       gradient: 'from-indigo-50 to-purple-50 dark:from-indigo-500/10 dark:to-purple-500/10',
       badge: 'Most Popular',
       badgeColor: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+      href: '/pricing/checkout?plan=pro',
       features: [
         'Everything in Free',
         'All 6 premium templates',
@@ -103,6 +105,7 @@ export default function PricingPage() {
       border: 'border-violet-200 dark:border-violet-500/20',
       gradient: 'from-violet-50 to-purple-50 dark:from-violet-500/5 dark:to-purple-500/5',
       badge: null,
+      href: '/pricing/checkout?plan=enterprise',
       features: [
         'Everything in Pro',
         'Team collaboration',
@@ -209,7 +212,7 @@ export default function PricingPage() {
                     variant={plan.ctaVariant}
                     asChild
                   >
-                    <Link href="/signup">{plan.cta}<ArrowRight className="h-4 w-4 ml-2" /></Link>
+                    <Link href={plan.href}>{plan.cta}<ArrowRight className="h-4 w-4 ml-2" /></Link>
                   </Button>
 
                   <div className="space-y-3 flex-1">
