@@ -24,9 +24,9 @@ export default function ContactPage() {
           {/* Contact Info */}
           <div className="space-y-4">
             {[
-              { icon: Mail, title: 'Email', desc: 'hello@folioforge.dev', color: 'text-blue-500' },
-              { icon: MapPin, title: 'Location', desc: 'San Francisco, CA', color: 'text-emerald-500' },
-              { icon: Phone, title: 'Phone', desc: '+1 (555) 123-4567', color: 'text-violet-500' },
+              { icon: Mail, title: 'Email', desc: 'akhileshwuna22@gmail.com', color: 'text-blue-500' },
+              { icon: MapPin, title: 'Location', desc: 'India , Andhra Pradesh', color: 'text-emerald-500' },
+              { icon: Phone, title: 'Phone', desc: '+91 7842727605', color: 'text-violet-500' },
               { icon: Clock, title: 'Hours', desc: 'Mon-Fri, 9AM-6PM PST', color: 'text-amber-500' },
             ].map((item) => (
               <Card key={item.title} className="p-4 border-border bg-card flex items-center gap-4">
@@ -47,11 +47,11 @@ export default function ContactPage() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">Name</label>
-                  <Input placeholder="John Doe" className="h-11 bg-muted/50 border-border rounded-xl" />
+                  <Input placeholder="Akhilesh" className="h-11 bg-muted/50 border-border rounded-xl" />
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">Email</label>
-                  <Input type="email" placeholder="john@example.com" className="h-11 bg-muted/50 border-border rounded-xl" />
+                  <Input type="email" placeholder="akhilesh@example.com" className="h-11 bg-muted/50 border-border rounded-xl" />
                 </div>
               </div>
               <div>

@@ -69,11 +69,11 @@ const quickLinks = [
 ]
 
 const popularArticles = [
-  { title: 'How to connect your GitHub account', views: '12.5K', time: '3 min read' },
-  { title: 'Customizing your portfolio template', views: '8.2K', time: '5 min read' },
-  { title: 'Deploying to Vercel step by step', views: '6.8K', time: '4 min read' },
-  { title: 'Setting up a custom domain', views: '5.1K', time: '6 min read' },
-  { title: 'Generating your ATS-friendly resume', views: '4.3K', time: '2 min read' },
+  { title: 'How to connect your GitHub account', views: '12.5K', time: '3 min read', href: '/docs/articles/connect-github' },
+  { title: 'Customizing your portfolio template', views: '8.2K', time: '5 min read', href: '/docs/articles/customize-template' },
+  { title: 'Deploying to Vercel step by step', views: '6.8K', time: '4 min read', href: '/docs/articles/deploy-vercel' },
+  { title: 'Setting up a custom domain', views: '5.1K', time: '6 min read', href: '/docs/articles/custom-domain' },
+  { title: 'Generating your ATS-friendly resume', views: '4.3K', time: '2 min read', href: '/docs/articles/ats-resume' },
 ]
 
 export default function DocsPage() {
@@ -173,7 +173,7 @@ export default function DocsPage() {
 
               <Card className="border-2 border-border bg-muted/30 dark:bg-white/[0.02] backdrop-blur-sm divide-y divide-border">
                 {popularArticles.map((article, idx) => (
-                  <Link key={idx} href="/docs" className="flex items-center justify-between p-5 hover:bg-muted/50 dark:hover:bg-white/[0.03] transition-all group">
+                  <Link key={idx} href={article.href} className="flex items-center justify-between p-5 hover:bg-muted/50 dark:hover:bg-white/[0.03] transition-all group">
                     <div className="flex items-center gap-4 min-w-0">
                       <span className="text-sm font-bold text-muted-foreground w-6 flex-shrink-0">{String(idx + 1).padStart(2, '0')}</span>
                       <div className="min-w-0">
